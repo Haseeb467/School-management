@@ -1,0 +1,109 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin{
+  id       String   @id @default()
+  username String 
+}
+
+model Student{
+  id String @id @unique
+  username String @unique
+  name String
+  surname String
+  email String?
+  phone String?
+  address String
+  img String
+  bloodType String
+  Sex UserSex
+  createdAt DateTime @default(now())
+  parentId String
+  parent Parent @relation(fields: [parentId] , reference: [id])
+}
+
+model Teacher{
+  id String @id @unique
+  username String @unique
+  name String 
+  surname String 
+  email String
+  phone String
+  address String
+  bolodType  String 
+  sex UserSex
+  createdAt DateTime @default(now()) 
+  subjects Subject[]  
+  Subject Subject @relation(fields: [subjectId] , references: [id])/
+}
+
+model Parent{
+  id String @id @unique
+  username String @unique
+  name String
+  surname String
+  email String?
+  phone String?
+  address String
+  createdAt DateTime @default(now())
+  students Student[]
+}
+
+model Grade{}
+
+model Subject{
+  id Int @id @default(autoincrement() )
+  name String 
+  teacher Teacher[]
+  lesson Lesson[]
+
+}
+
+model Class{
+  id Int @id @default(autoincrement() )
+  name String
+}
+
+model Exam{}
+
+model Lesson{
+  id Int @id @default(autoincrement())
+  name String
+  day Day
+  startTime DateTime
+  endTime DateTime
+
+  subjectId Int
+  subject Subject @relation(fields: [subjectId] , references: [id])
+}
+
+model Assignment{}
+
+model Result{}
+
+model Attendance{}
+
+model Event{}
+
+model Announcement{}
+
+enum UserSex{
+  Male
+  Female
+}
+
+enum Day{
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
